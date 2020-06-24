@@ -1,0 +1,29 @@
+{
+    "name": "JD namer",
+    "version": "0.0.1",
+    "description": "",
+    "dependencies": {
+        "hw": "*",
+        "device": "*",
+        "controller": "*",
+        "edge-connector": "*",
+        "net": "*",
+        "jacdac-services": "github:microsoft/pxt-jacdac-services#v0.0.2"
+    },
+    "files": [
+        "appuf2.ts",
+        "appuf2.cpp",
+        "ui.ts",
+        "main.ts",
+        "services.ts",
+        "jdflash.ts",
+        "README.md"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "supportedTargets": [
+        "arcade"
+    ],
+    "preferredEditor": "tsprj"
+}

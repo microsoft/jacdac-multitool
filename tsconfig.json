@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "outDir": "built",
+        "rootDir": ".",
+        "newLine": "LF",
+        "sourceMap": false
+    },
+    "include": [
+        "*.ts",
+        "../../node_modules/pxt-common-packages/libs/*/*.ts",
+        "../../node_modules/pxt-core/libs/pxt-common/*.ts",
+        "../../../pxt-jacdac-services/*.ts",
+        "../../libs/*/*.ts"
+    ]
+}
