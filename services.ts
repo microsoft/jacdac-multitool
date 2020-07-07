@@ -7,8 +7,10 @@ class ServiceDesc {
 }
 
 const serviceDescs = [
-    new ServiceDesc(jd_class.ACCELEROMETER, "acc",
+     new ServiceDesc(jd_class.ACCELEROMETER, "acc",
         num => jacdac.accelerometerClient.setStreaming(num & 1 ? true : false)),
+    new ServiceDesc(jd_class.RGB_LED, "RGBLED", 
+        num => jacdac.rgbledClient.setColor(randint(0, 0xffffffff))),
     new ServiceDesc(jd_class.LIGHT, "light", (num) => {
         const cl = jacdac.lightClient
         cl.setBrightness(10)
