@@ -1,4 +1,3 @@
-// Add your code here
 namespace jd_class {
     export const RGB_LED = 0xe7aeb0fc;
 }
