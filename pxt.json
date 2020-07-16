@@ -17,8 +17,7 @@
         "main.ts",
         "services.ts",
         "jdflash.ts",
-        "README.md",
-        "rgbledclient.ts"
+        "README.md"
     ],
     "testFiles": [
         "test.ts"
