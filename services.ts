@@ -2,17 +2,22 @@ class ServiceDesc {
     constructor(
         public classNum: number,
         public name: string,
-        public testFn?: (num: number) => void
-    ) { }
+        public testFn?: (num: number) => void,
+        public viewFn?: (d: jacdac.Device, s: ServiceDesc) => void
+    ) {
+        this.viewFn = viewFn || sensorView
+    }
 }
 
 const serviceDescs = [
-    new ServiceDesc(jd_class.ACCELEROMETER, "acc",
+     new ServiceDesc(jd_class.ACCELEROMETER, "acc",
         num => jacdac.accelerometerClient.setStreaming(num & 1 ? true : false)),
+    new ServiceDesc(jd_class.RGB_LED, "RGBLED",
+        num => jacdac.rgbledClient.setColor(randint(0, 0xffffffff))),
     new ServiceDesc(jd_class.LIGHT, "light", (num) => {
         const cl = jacdac.lightClient
         cl.setBrightness(10)
-        cl.setStrip(128, jacdac.LightType.WS2812B_SK9822)
+        cl.setStrip(128, jacdac.LightType.WS2812B_GRB)
 
         const duration = 30 * 1000
         //cl.showAnimation(new jacdac.lightanimation.ColorWipe, duration)
@@ -62,8 +67,7 @@ const serviceDescs = [
     new ServiceDesc(jd_class.LOGGER, "logger"),
     new ServiceDesc(jd_class.ROTARY_ENCODER, "crank",
         num => jacdac.rotaryEncoderClient.setStreaming(num & 1 ? true : false)),
-    new ServiceDesc(jd_class.BUTTON, "btn",
-        num => jacdac.rotaryEncoderClient.setStreaming(num & 1 ? true : false)),
+    new ServiceDesc(jd_class.BUTTON, "btn", num =>{}, buttonView),
     new ServiceDesc(jd_class.MUSIC, "music",
         num => jacdac.musicClient.playMelody(music.jumpDown, 20)),
 ]
@@ -92,6 +96,39 @@ function sensorView(d: jacdac.Device, s: ServiceDesc) {
     })
 
     client.destroy()
+}
+
+function buttonView(d: jacdac.Device, s: ServiceDesc) {
+    const buttonState = menu.item("State: ", () => { })
+
+    jacdac.buttonClient.onEvent(JDButtonEvent.Click, () => {
+        buttonState.name += ", Click"
+    })
+
+    jacdac.buttonClient.onEvent(JDButtonEvent.LongClick, () => {
+        buttonState.name += ", Long click"
+    })
+
+    jacdac.buttonClient.onEvent(JDButtonEvent.Down, () => {
+        buttonState.name = "Down"
+    })
+
+    jacdac.buttonClient.onEvent(JDButtonEvent.Up, () => {
+        buttonState.name = "Up"
+    })
+
+    jacdac.buttonClient.onEvent(JDButtonEvent.Hold, () => {
+        buttonState.name = "Hold"
+    })
+
+    menu.show({
+        title: "Device: " + d.shortId + " / " + s.name,
+        update: opts => {
+            opts.elements = [buttonState]
+            if (!d.isConnected)
+                menu.exit(opts)
+        }
+    })
 }
 
 function hexNum(n: number) {
@@ -149,7 +186,7 @@ function deviceView(d: jacdac.Device) {
             opts.elements.push(menu.item("Identify", () => identify(d)))
             opts.elements.push(menu.item("---", noop))
             opts.elements = opts.elements.concat(services.map(s => menu.item(s.name, () => {
-                sensorView(d, s)
+                s.viewFn(d,s)
             }, opts => {
                 if (s.testFn) {
                     s.testFn(++num)
