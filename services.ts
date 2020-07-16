@@ -14,7 +14,7 @@ const serviceDescs = [
     new ServiceDesc(jd_class.LIGHT, "light", (num) => {
         const cl = jacdac.lightClient
         cl.setBrightness(10)
-        cl.setStrip(128, jacdac.LightType.WS2812B_SK9822)
+        cl.setStrip(128, jacdac.LightType.WS2812B_GRB)
 
         const duration = 30 * 1000
         //cl.showAnimation(new jacdac.lightanimation.ColorWipe, duration)
