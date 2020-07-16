@@ -99,26 +99,26 @@ function sensorView(d: jacdac.Device, s: ServiceDesc) {
 }
 
 function buttonView(d: jacdac.Device, s: ServiceDesc) {
-    let buttonState = ""
+    const buttonState = menu.item("State: ", () => { })
 
-    jacdac.buttonClient.onEvent(JDButton.Click, () => {
-        buttonState += ", Click"
+    jacdac.buttonClient.onEvent(JDButtonEvent.Click, () => {
+        buttonState.name += ", Click"
     })
 
-    jacdac.buttonClient.onEvent(JDButton.LongClick, () => {
-        buttonState += ", Long click"
+    jacdac.buttonClient.onEvent(JDButtonEvent.LongClick, () => {
+        buttonState.name += ", Long click"
     })
 
-    jacdac.buttonClient.onEvent(JDButton.Down, () => {
-        buttonState = "Down"
+    jacdac.buttonClient.onEvent(JDButtonEvent.Down, () => {
+        buttonState.name = "Down"
     })
 
-    jacdac.buttonClient.onEvent(JDButton.Up, () => {
-        buttonState = "Up"
+    jacdac.buttonClient.onEvent(JDButtonEvent.Up, () => {
+        buttonState.name = "Up"
     })
 
-    jacdac.buttonClient.onEvent(JDButton.Hold, () => {
-        buttonState = "Hold"
+    jacdac.buttonClient.onEvent(JDButtonEvent.Hold, () => {
+        buttonState.name = "Hold"
     })
 
     menu.show({
