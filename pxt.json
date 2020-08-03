@@ -8,7 +8,7 @@
         "controller": "*",
         "edge-connector": "*",
         "net": "*",
-        "jacdac-services": "github:microsoft/pxt-jacdac-services#v0.0.2"
+        "jacdac-services": "github:microsoft/pxt-jacdac-services#v0.0.5"
     },
     "files": [
         "appuf2.ts",
