@@ -12,7 +12,8 @@ const serviceDescs = [
     new ServiceDesc(jd_class.LIGHT, "light", (num) => {
         const cl = jacdac.lightClient
         cl.setBrightness(10)
-        cl.setStrip(128, jacdac.LightType.WS2812B_SK9822)
+        //cl.setStrip(128, jacdac.LightType.WS2812B_SK9822)
+        cl.setStrip(80, jacdac.LightType.WS2812B_GRB)
 
         const duration = 30 * 1000
         //cl.showAnimation(new jacdac.lightanimation.ColorWipe, duration)
@@ -146,6 +147,7 @@ function deviceView(d: jacdac.Device) {
             opts.elements.push(menu.item(d.classDescription, noop))
             opts.elements.push(menu.item(d.firmwareVersion, noop))
             opts.elements.push(menu.item("Temp: " + (d.temperature || "?") + "C", noop))
+            opts.elements.push(menu.item("Uptime: " + Math.round((d.queryInt(jacdac.REG_CTRL_MICROS_SINCE_BOOT) || 0) / 1000000) + "s", noop))
             opts.elements.push(menu.item("Identify", () => identify(d)))
             opts.elements.push(menu.item("---", noop))
             opts.elements = opts.elements.concat(services.map(s => menu.item(s.name, () => {

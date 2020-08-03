@@ -112,6 +112,8 @@ function startConsole() {
 function wifi() {
     showConsole()
 
+    //net.updateAccessPoint("SSID", "pass")
+    
     console.log("WiFi starting...")
     net.logPriority = ConsolePriority.Log
     const n = net.instance()
@@ -122,6 +124,7 @@ function wifi() {
 
     const resp = net.get("https://pxt.io/api/ping")
     console.log("resp: " + resp.toString())
+    console.log("cont: " + resp.content)
 
 
     hideConsole()
