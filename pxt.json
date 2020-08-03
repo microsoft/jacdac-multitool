@@ -1,6 +1,6 @@
 {
     "name": "JD namer",
-    "version": "0.0.4",
+    "version": "0.0.3",
     "description": "",
     "dependencies": {
         "hw": "*",
