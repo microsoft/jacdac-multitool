@@ -11,33 +11,53 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [8.x]
 
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: install node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Cache npm and makecode
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.npm
-            ~/.pxt/mkc-cache
-          key: ${{ runner.os }}
-      - name: npm install
+      - name: install makecode
         run: |
-          npm install -g makecode
-      - run: makecode --hw f4
-      - run: makecode --hw d5
-      - run: cat built/*/*.uf2 > drop.uf2
-      - name: upload release
+          npm install -g pxt
+          pxt target arcade
+      - name: build js
+        run: |
+          pxt clean
+          pxt install
+          pxt build --cloud
+      - name: build D51
+        continue-on-error: true
+        run: |
+          pxt clean
+          pxt install --hw samd51
+          pxt build --hw samd51 --cloud
+          cp ./built/binary.uf2 binary-d51.uf2
+      - name: build F4
+        continue-on-error: true
+        run: |
+          pxt clean
+          pxt install --hw stm32f401
+          pxt build --hw stm32f401 --cloud
+          cp ./built/binary.uf2 binary-f4.uf2
+      - name: build P0
+        continue-on-error: true
+        run: |
+          pxt clean
+          pxt install --hw rpi
+          pxt build --hw rpi --cloud
+          cp ./built/binary.uf2 binary-p0.uf2
+      - name: bundle all
+        run: |
+          cat binary-*.uf2 > built/arcade.uf2
+      - name: upload bundled
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./drop.uf2
-          asset_name: combined-f4-d5.uf2
+          asset_path: ./built/arcade.uf2
+          asset_name: arcade.uf2
           asset_content_type: application/octet-stream
