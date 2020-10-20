@@ -1,4 +1,4 @@
-let dns: jacdac.DeviceNameClient
+let dns: jacdac.DeviceNamerClient
 
 function describe(dev: jacdac.Device) {
     let name = ""
@@ -48,7 +48,7 @@ function selectDevice(fun: string, cond: (dev: jacdac.Device) => boolean) {
 }
 
 function operateDNS(ourDNS: jacdac.Device) {
-    dns = new jacdac.DeviceNameClient(ourDNS.deviceId)
+    dns = new jacdac.DeviceNamerClient(ourDNS.deviceId);
     dns.scan()
 
     menu.show({
