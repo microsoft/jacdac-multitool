@@ -1,6 +1,6 @@
 {
     "name": "jacdac-multitool",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "",
     "dependencies": {
         "hw": "*",
@@ -27,5 +27,6 @@
         "arcade"
     ],
     "preferredEditor": "tsprj",
-    "disableTargetTemplateFiles": true
+    "disableTargetTemplateFiles": true,
+    "binaryonly": true
 }
