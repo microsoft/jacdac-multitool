@@ -167,37 +167,4 @@ function main() {
     mainMenu()
 }
 
-function initUF2() {
-    let lastWrite = 0
-    console.addListener((pri, txt) => control.dmesg("C: " + txt.slice(0, -1)))
-    jacdac.consolePriority = ConsolePriority.Log
-    appuf2.init({
-        files: {
-            "readme.txt": "Drop .UF2 files here with JACDAC firmware!",
-            "jd-uf2.txt": "Auto-detect"
-        },
-        volumeLabel: "JACDAC UF2",
-        writeHandler: buf => {
-            if (!lastWrite) {
-                game.pushScene() // clear screen
-                game.consoleOverlay.setVisible(true)
-                console.log("starting UF2 flash over JACDAC")
-            }
-            lastWrite = 0 // don't reset while we're flashing this block
-            jdflash.handleUF2Block(buf)
-            lastWrite = control.millis()
-        }
-    })
-    jacdac.onAnnounce(() => {
-        if (lastWrite && control.millis() - lastWrite > 1000) {
-            lastWrite = 0
-            console.log("ending flash... press any key")
-            resetAll() // just in case
-            pauseUntil(() => controller.anyButton.isPressed())
-            control.reset() // and ourselves, to clear the UF2 cached in the host
-        }
-    })
-}
-
-initUF2()
 control.runInBackground(main)
