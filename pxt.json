@@ -23,11 +23,12 @@
         "test.ts"
     ],
     "targetVersions": {
-        "target": "1.3.11",
+        "target": "1.2.6",
         "targetId": "arcade"
     },
     "supportedTargets": [
         "arcade"
     ],
-    "preferredEditor": "tsprj"
+    "preferredEditor": "tsprj",
+    "disableTargetTemplateFiles": true
 }
