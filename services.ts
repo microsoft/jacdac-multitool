@@ -7,9 +7,9 @@ class ServiceDesc {
 }
 
 const serviceDescs: ServiceDesc[] = [
-    /*
-    new ServiceDesc(jd_class.ACCELEROMETER, "acc",
+    new ServiceDesc(jacdac.SRV_ACCELEROMETER, "acc",
         num => jacdac.accelerometerClient.setStreaming(num & 1 ? true : false)),
+    /*
     new ServiceDesc(jd_class.LIGHT, "light", (num) => {
         const cl = jacdac.lightClient
         cl.setBrightness(10)

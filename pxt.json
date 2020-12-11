@@ -8,7 +8,8 @@
         "controller": "*",
         "edge-connector": "*",
         "net": "*",
-        "jacdac-services": "github:microsoft/pxt-jacdac"
+        "jacdac-accelerometer": "github:microsoft/pxt-jacdac/accelerometer#v0.2.4",
+        "jacdac": "github:microsoft/pxt-jacdac"
     },
     "files": [
         "ui.ts",
