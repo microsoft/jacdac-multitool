@@ -9,7 +9,8 @@
         "edge-connector": "*",
         "net": "*",
         "jacdac-accelerometer": "github:microsoft/pxt-jacdac/accelerometer#v0.2.4",
-        "jacdac": "github:microsoft/pxt-jacdac"
+        "jacdac-light": "github:microsoft/pxt-jacdac/light#v0.2.4",
+        "jacdac-servo": "github:microsoft/pxt-jacdac/servo#v0.2.4"
     },
     "files": [
         "ui.ts",

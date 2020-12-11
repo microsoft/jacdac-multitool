@@ -9,10 +9,9 @@ class ServiceDesc {
 const serviceDescs: ServiceDesc[] = [
     new ServiceDesc(jacdac.SRV_ACCELEROMETER, "acc",
         num => jacdac.accelerometerClient.setStreaming(num & 1 ? true : false)),
-    /*
-    new ServiceDesc(jd_class.LIGHT, "light", (num) => {
-        const cl = jacdac.lightClient
-        cl.setBrightness(10)
+    new ServiceDesc(jacdac.SRV_LIGHT, "light", (num) => {
+        const cl = jacdac.lightClient;
+        cl.setBrightness(10);
         //cl.setStrip(128, jacdac.LightType.WS2812B_SK9822)
         cl.setStrip(80, jacdac.LightType.WS2812B_GRB)
 
@@ -46,14 +45,14 @@ const serviceDescs: ServiceDesc[] = [
                 break
         }
 
-
         //pause(500)
         //cl.setAll(0x0)
         //jacdac.monoLightClient.setBrightness(0)
     }),
-    new ServiceDesc(jd_class.SERVO, "servo", num =>
+    new ServiceDesc(jacdac.SRV_SERVO, "servo", num =>
         (num & 3) == 0 ? jacdac.servoClient.turnOff() :
             jacdac.servoClient.setAngle(num & 1 ? 90 : 45)),
+    /*
     new ServiceDesc(jd_class.MOTOR, "motor", num =>
         jacdac.motorClient.run(((num % 11) - 5) * 20)),
     new ServiceDesc(jd_class.PWM_LIGHT, "glo", num => {
