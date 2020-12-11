@@ -60,14 +60,12 @@ const serviceDescs: ServiceDesc[] = [
         jacdac.monoLightClient.showAnimation(jacdac.mono.slowGlow)
     }),
     new ServiceDesc(jacdac.SRV_LOGGER, "logger"),
-    /*
-    new ServiceDesc(jd_class.ROTARY_ENCODER, "crank",
+    new ServiceDesc(jacdac.SRV_ROTARY_ENCODER, "crank",
         num => jacdac.rotaryEncoderClient.setStreaming(num & 1 ? true : false)),
-    new ServiceDesc(jd_class.BUTTON, "btn",
+    new ServiceDesc(jacdac.SRV_BUTTON, "btn",
         num => jacdac.rotaryEncoderClient.setStreaming(num & 1 ? true : false)),
-    new ServiceDesc(jd_class.MUSIC, "music",
-        num => jacdac.musicClient.playMelody(music.jumpDown, 20)),
-        */
+    new ServiceDesc(jacdac.SRV_BUZZER, "buz",
+        num => jacdac.buzzerClient.playMelody(music.jumpDown, 20)),
 ]
 
 class RawSensorClient extends jacdac.SensorClient {

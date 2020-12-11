@@ -12,7 +12,10 @@
         "jacdac-light": "github:microsoft/pxt-jacdac/light#v0.2.4",
         "jacdac-servo": "github:microsoft/pxt-jacdac/servo#v0.2.4",
         "jacdac-motor": "github:microsoft/pxt-jacdac/motor#v0.2.4",
-        "jacdac-pwm-light": "github:microsoft/pxt-jacdac/pwm-light#v0.2.4"
+        "jacdac-pwm-light": "github:microsoft/pxt-jacdac/pwm-light#v0.2.4",
+        "jacdac-rotary-encoder": "github:microsoft/pxt-jacdac/rotary-encoder#v0.2.4",
+        "jacdac-button": "github:microsoft/pxt-jacdac/button#v0.2.4",
+        "jacdac-buzzer": "github:microsoft/pxt-jacdac/buzzer#v0.2.4"
     },
     "files": [
         "ui.ts",
