@@ -6,12 +6,12 @@ class ServiceDesc {
     ) { }
 }
 
-const serviceDescs = [
-    new ServiceDesc(jd_class.ACCELEROMETER, "acc",
+const serviceDescs: ServiceDesc[] = [
+    new ServiceDesc(jacdac.SRV_ACCELEROMETER, "acc",
         num => jacdac.accelerometerClient.setStreaming(num & 1 ? true : false)),
-    new ServiceDesc(jd_class.LIGHT, "light", (num) => {
-        const cl = jacdac.lightClient
-        cl.setBrightness(10)
+    new ServiceDesc(jacdac.SRV_LIGHT, "light", (num) => {
+        const cl = jacdac.lightClient;
+        cl.setBrightness(10);
         //cl.setStrip(128, jacdac.LightType.WS2812B_SK9822)
         cl.setStrip(80, jacdac.LightType.WS2812B_GRB)
 
@@ -45,28 +45,27 @@ const serviceDescs = [
                 break
         }
 
-
         //pause(500)
         //cl.setAll(0x0)
         //jacdac.monoLightClient.setBrightness(0)
     }),
-    new ServiceDesc(jd_class.SERVO, "servo", num =>
+    new ServiceDesc(jacdac.SRV_SERVO, "servo", num =>
         (num & 3) == 0 ? jacdac.servoClient.turnOff() :
             jacdac.servoClient.setAngle(num & 1 ? 90 : 45)),
-    new ServiceDesc(jd_class.MOTOR, "motor", num =>
+    new ServiceDesc(jacdac.SRV_MOTOR, "motor", num =>
         jacdac.motorClient.run(((num % 11) - 5) * 20)),
-    new ServiceDesc(jd_class.PWM_LIGHT, "glo", num => {
+    new ServiceDesc(jacdac.SRV_PWM_LIGHT, "glo", num => {
         jacdac.monoLightClient.setBrightness(num & 1 ? 50 : 0)
         jacdac.monoLightClient.setIterations(1)
         jacdac.monoLightClient.showAnimation(jacdac.mono.slowGlow)
     }),
-    new ServiceDesc(jd_class.LOGGER, "logger"),
-    new ServiceDesc(jd_class.ROTARY_ENCODER, "crank",
+    new ServiceDesc(jacdac.SRV_LOGGER, "logger"),
+    new ServiceDesc(jacdac.SRV_ROTARY_ENCODER, "crank",
         num => jacdac.rotaryEncoderClient.setStreaming(num & 1 ? true : false)),
-    new ServiceDesc(jd_class.BUTTON, "btn",
+    new ServiceDesc(jacdac.SRV_BUTTON, "btn",
         num => jacdac.rotaryEncoderClient.setStreaming(num & 1 ? true : false)),
-    new ServiceDesc(jd_class.MUSIC, "music",
-        num => jacdac.musicClient.playMelody(music.jumpDown, 20)),
+    new ServiceDesc(jacdac.SRV_BUZZER, "buz",
+        num => jacdac.buzzerClient.playMelody(music.jumpDown, 20)),
 ]
 
 class RawSensorClient extends jacdac.SensorClient {
@@ -144,10 +143,10 @@ function deviceView(d: jacdac.Device) {
         footer: "A = select, -> = test service",
         update: opts => {
             opts.elements = []
-            opts.elements.push(menu.item(d.classDescription, noop))
+            //opts.elements.push(menu.item(d..classDescription, noop))
             opts.elements.push(menu.item(d.firmwareVersion, noop))
-            opts.elements.push(menu.item("Temp: " + (d.temperature || "?") + "C", noop))
-            opts.elements.push(menu.item("Uptime: " + Math.round((d.queryInt(jacdac.REG_CTRL_MICROS_SINCE_BOOT) || 0) / 1000000) + "s", noop))
+            opts.elements.push(menu.item("Temp: " + (d.mcuTemperature || "?") + "C", noop))
+            opts.elements.push(menu.item("Uptime: " + Math.round((d.queryInt(jacdac.ControlReg.Uptime) || 0) / 1000000) + "s", noop))
             opts.elements.push(menu.item("Identify", () => identify(d)))
             opts.elements.push(menu.item("---", noop))
             opts.elements = opts.elements.concat(services.map(s => menu.item(s.name, () => {

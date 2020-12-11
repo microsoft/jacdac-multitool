@@ -92,7 +92,8 @@ namespace menu {
 
                 const x = 10
                 if (opts.elements.length == 0) {
-                    screen.print("Nothing here, press B to go back", x, 60, 4, image.font5)
+                    screen.print("Nothing here", x, 60, 4, image.font5)
+                    screen.print("press B to go back", x, 80, 4, image.font5)
                     return
                 }
                 // if elements changed, cursor could be off limits - move(0) will limit it

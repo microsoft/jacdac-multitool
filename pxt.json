@@ -1,6 +1,6 @@
 {
     "name": "jacdac-multitool",
-    "version": "0.0.6",
+    "version": "0.1.0",
     "description": "",
     "dependencies": {
         "hw": "*",
@@ -8,7 +8,14 @@
         "controller": "*",
         "edge-connector": "*",
         "net": "*",
-        "jacdac-services": "github:microsoft/pxt-jacdac"
+        "jacdac-accelerometer": "github:microsoft/pxt-jacdac/accelerometer#v0.2.4",
+        "jacdac-light": "github:microsoft/pxt-jacdac/light#v0.2.4",
+        "jacdac-servo": "github:microsoft/pxt-jacdac/servo#v0.2.4",
+        "jacdac-motor": "github:microsoft/pxt-jacdac/motor#v0.2.4",
+        "jacdac-pwm-light": "github:microsoft/pxt-jacdac/pwm-light#v0.2.4",
+        "jacdac-rotary-encoder": "github:microsoft/pxt-jacdac/rotary-encoder#v0.2.4",
+        "jacdac-button": "github:microsoft/pxt-jacdac/button#v0.2.4",
+        "jacdac-buzzer": "github:microsoft/pxt-jacdac/buzzer#v0.2.4"
     },
     "files": [
         "ui.ts",
@@ -20,7 +27,7 @@
         "test.ts"
     ],
     "targetVersions": {
-        "target": "1.2.6",
+        "target": "1.3.20",
         "targetId": "arcade"
     },
     "supportedTargets": [
