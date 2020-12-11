@@ -52,15 +52,15 @@ const serviceDescs: ServiceDesc[] = [
     new ServiceDesc(jacdac.SRV_SERVO, "servo", num =>
         (num & 3) == 0 ? jacdac.servoClient.turnOff() :
             jacdac.servoClient.setAngle(num & 1 ? 90 : 45)),
-    /*
-    new ServiceDesc(jd_class.MOTOR, "motor", num =>
+    new ServiceDesc(jacdac.SRV_MOTOR, "motor", num =>
         jacdac.motorClient.run(((num % 11) - 5) * 20)),
-    new ServiceDesc(jd_class.PWM_LIGHT, "glo", num => {
+    new ServiceDesc(jacdac.SRV_PWM_LIGHT, "glo", num => {
         jacdac.monoLightClient.setBrightness(num & 1 ? 50 : 0)
         jacdac.monoLightClient.setIterations(1)
         jacdac.monoLightClient.showAnimation(jacdac.mono.slowGlow)
     }),
-    new ServiceDesc(jd_class.LOGGER, "logger"),
+    new ServiceDesc(jacdac.SRV_LOGGER, "logger"),
+    /*
     new ServiceDesc(jd_class.ROTARY_ENCODER, "crank",
         num => jacdac.rotaryEncoderClient.setStreaming(num & 1 ? true : false)),
     new ServiceDesc(jd_class.BUTTON, "btn",

@@ -10,7 +10,9 @@
         "net": "*",
         "jacdac-accelerometer": "github:microsoft/pxt-jacdac/accelerometer#v0.2.4",
         "jacdac-light": "github:microsoft/pxt-jacdac/light#v0.2.4",
-        "jacdac-servo": "github:microsoft/pxt-jacdac/servo#v0.2.4"
+        "jacdac-servo": "github:microsoft/pxt-jacdac/servo#v0.2.4",
+        "jacdac-motor": "github:microsoft/pxt-jacdac/motor#v0.2.4",
+        "jacdac-pwm-light": "github:microsoft/pxt-jacdac/pwm-light#v0.2.4"
     },
     "files": [
         "ui.ts",
