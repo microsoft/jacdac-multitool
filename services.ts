@@ -6,7 +6,8 @@ class ServiceDesc {
     ) { }
 }
 
-const serviceDescs = [
+const serviceDescs: ServiceDesc[] = [
+    /*
     new ServiceDesc(jd_class.ACCELEROMETER, "acc",
         num => jacdac.accelerometerClient.setStreaming(num & 1 ? true : false)),
     new ServiceDesc(jd_class.LIGHT, "light", (num) => {
@@ -67,6 +68,7 @@ const serviceDescs = [
         num => jacdac.rotaryEncoderClient.setStreaming(num & 1 ? true : false)),
     new ServiceDesc(jd_class.MUSIC, "music",
         num => jacdac.musicClient.playMelody(music.jumpDown, 20)),
+        */
 ]
 
 class RawSensorClient extends jacdac.SensorClient {
@@ -144,10 +146,10 @@ function deviceView(d: jacdac.Device) {
         footer: "A = select, -> = test service",
         update: opts => {
             opts.elements = []
-            opts.elements.push(menu.item(d.classDescription, noop))
+            //opts.elements.push(menu.item(d..classDescription, noop))
             opts.elements.push(menu.item(d.firmwareVersion, noop))
-            opts.elements.push(menu.item("Temp: " + (d.temperature || "?") + "C", noop))
-            opts.elements.push(menu.item("Uptime: " + Math.round((d.queryInt(jacdac.REG_CTRL_MICROS_SINCE_BOOT) || 0) / 1000000) + "s", noop))
+            opts.elements.push(menu.item("Temp: " + (d.mcuTemperature || "?") + "C", noop))
+            opts.elements.push(menu.item("Uptime: " + Math.round((d.queryInt(jacdac.ControlReg.Uptime) || 0) / 1000000) + "s", noop))
             opts.elements.push(menu.item("Identify", () => identify(d)))
             opts.elements.push(menu.item("---", noop))
             opts.elements = opts.elements.concat(services.map(s => menu.item(s.name, () => {

@@ -1,4 +1,4 @@
-let dns: jacdac.DeviceNamerClient
+let dns: jacdac.RoleManagerClient
 
 function describe(dev: jacdac.Device) {
     let name = ""
@@ -27,7 +27,7 @@ function identify(d: jacdac.Device) {
     if (d == jacdac.selfDevice())
         control.runInBackground(jacdac.onIdentifyRequest)
     else
-        d.sendCtrlCommand(jacdac.CMD_CTRL_IDENTIFY)
+        d.sendCtrlCommand(jacdac.ControlCmd.Identify)
 }
 
 function selectDevice(fun: string, cond: (dev: jacdac.Device) => boolean) {
@@ -48,7 +48,7 @@ function selectDevice(fun: string, cond: (dev: jacdac.Device) => boolean) {
 }
 
 function operateDNS(ourDNS: jacdac.Device) {
-    dns = new jacdac.DeviceNamerClient(ourDNS.deviceId);
+    dns = new jacdac.RoleManagerClient(ourDNS.deviceId);
     dns.scan()
 
     menu.show({
@@ -72,13 +72,13 @@ function operateDNS(ourDNS: jacdac.Device) {
 function allDNSes() {
     return jacdac.devices().filter(hasDNS)
     function hasDNS(d: jacdac.Device) {
-        return d.hasService(jd_class.DEVICE_NAME_SERVICE)
+        return d.hasService(jacdac.SRV_ROLE_MANAGER)
     }
 }
 
 function resetAll() {
-    jacdac.JDPacket.onlyHeader(jacdac.CMD_CTRL_RESET)
-        .sendAsMultiCommand(jd_class.CTRL)
+    jacdac.JDPacket.onlyHeader(jacdac.ControlCmd.Reset)
+        .sendAsMultiCommand(jacdac.SRV_CONTROL)
 }
 
 let consoleClient: jacdac.ConsoleClient
@@ -102,7 +102,7 @@ function hideConsole() {
 function startConsole() {
     if (!consoleClient) {
         consoleClient = new jacdac.ConsoleClient()
-        consoleClient.minPriority = JDConsolePriority.Debug
+        consoleClient.minPriority = jacdac.consolePriority =  ConsolePriority.Debug
         consoleClient.start()
     }
     showConsole()
