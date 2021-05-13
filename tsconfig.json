@@ -11,9 +11,6 @@
     "include": [
         "*.ts",
         "pxt_modules/**/*.ts",
-        "../../node_modules/pxt-common-packages/libs/*/*.ts",
-        "../../node_modules/pxt-core/libs/pxt-common/*.ts",
-        "../../../pxt-jacdac-services/*.ts",
-        "../../libs/*/*.ts"
+        "../pxt-jacdac/**/*.ts"
     ]
 }

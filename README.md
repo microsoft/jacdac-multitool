@@ -4,6 +4,24 @@ Usage: Drop the `.uf2` generated in [Actions](https://github.com/microsoft/jacda
 
 Currently only works with F4 and D5 devices (of which only F4 was tested).
 
+## Building
+
+Use [makecode CLI](https://www.npmjs.com/package/makecode) to build.
+
+```
+> npm install -g makecode
+> makecode
+```
+
+If you want develop just this package, do `makecode --pxt-modules` and then `code .`.
+After that, build with simply `makecode`.
+
+If you want to develop it alongside `pxt-jacdac`, clone `pxt-jacdac` in the same folder where this repo is cloned.
+Then run `makecode --pxt-modules -c mkc-arcade.json` in `pxt-jacdac` (and remove `jacdac-multitool/pxt_modules` if any).
+Then create a workspace with both by running `code jacdac-multitool pxt-jacdac`.
+Finally, you will need to build with `makecode --config mkc-local.json` in `jacdac-multitool`.
+
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a

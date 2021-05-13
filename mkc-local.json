@@ -1,0 +1,14 @@
+{
+    "targetWebsite": "https://arcade.makecode.com/beta",
+    "links": {
+        "jacdac": "../pxt-jacdac",
+        "jacdac-accelerometer": "../pxt-jacdac/accelerometer",
+        "jacdac-servo": "../pxt-jacdac/servo",
+        "jacdac-motor": "../pxt-jacdac/motor",
+        "jacdac-button": "../pxt-jacdac/button",
+        "jacdac-buzzer": "../pxt-jacdac/buzzer",
+        "jacdac-rotaryencoder": "../pxt-jacdac/rotary-encoder",
+        "jacdac-ledpixel": "../pxt-jacdac/led-pixel",
+        "jacdac-led": "../pxt-jacdac/led"
+    }
+}
