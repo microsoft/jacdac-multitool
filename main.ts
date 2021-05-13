@@ -1,33 +1,22 @@
-let dns: jacdac.RoleManagerClient
-
-function describe(dev: jacdac.Device) {
-    let name = ""
-    if (dev == jacdac.selfDevice())
-        name = "<self>"
-    else if (dns) {
-        const bound = dns.remoteRequestedDevices.find(d => d.boundTo == dev)
-        if (bound) name = "(" + bound.name + ")"
-    }
-    return `${dev.shortId} ${name}`
-}
-
-function describeRemote(dev: jacdac.RemoteRequestedDevice) {
-    let bnd = dev.boundTo ? dev.boundTo.shortId : ""
-    const n = dev.candidates.filter(c => c != dev.boundTo).length
-    if (n) {
-        if (bnd) bnd += "+" + n
-        else bnd = "" + n
-    }
-    if (bnd) bnd = "(" + bnd + ")"
-    return `${dev.name} ${bnd}`
-}
-
 function identify(d: jacdac.Device) {
     if (!d) return
     if (d == jacdac.selfDevice())
         control.runInBackground(jacdac.onIdentifyRequest)
     else
         d.sendCtrlCommand(jacdac.ControlCmd.Identify)
+}
+
+function describe(dev: jacdac.Device) {
+    let name = ""
+    if (dev == jacdac.selfDevice())
+        name = "<self>"
+        /*
+    else if (dns) {
+        const bound = dns.remoteRequestedDevices.find(d => d.boundTo == dev)
+        if (bound) name = "(" + bound.name + ")"
+    }
+    */
+    return `${dev.shortId} ${name}`
 }
 
 function selectDevice(fun: string, cond: (dev: jacdac.Device) => boolean) {
@@ -47,41 +36,12 @@ function selectDevice(fun: string, cond: (dev: jacdac.Device) => boolean) {
     return res
 }
 
-function operateDNS(ourDNS: jacdac.Device) {
-    dns = new jacdac.RoleManagerClient(ourDNS.deviceId);
-    dns.scan()
-
-    menu.show({
-        title: "Bind function",
-        update: opts => {
-            opts.elements = dns.remoteRequestedDevices
-                .filter(r => r.name && r.name[0] != ".")
-                .map(r =>
-                    menu.item(describeRemote(r), () => {
-                        const newD = selectDevice(r.name, d => r.isCandidate(d))
-                        r.select(newD)
-                    }))
-            opts.elements.push(menu.item("Clear all names", () => {
-                dns.clearNames()
-                resetAll() // and reset everyone, just in case
-            }))
-        }
-    })
-}
-
-function allDNSes() {
-    return jacdac.devices().filter(hasDNS)
-    function hasDNS(d: jacdac.Device) {
-        return d.hasService(jacdac.SRV_ROLE_MANAGER)
-    }
-}
-
 function resetAll() {
     jacdac.JDPacket.onlyHeader(jacdac.ControlCmd.Reset)
         .sendAsMultiCommand(jacdac.SRV_CONTROL)
 }
 
-let consoleClient: jacdac.ConsoleClient
+let consoleClient: jacdac.LoggerClient
 
 function showConsole() {
     game.pushScene() // black bg
@@ -101,8 +61,9 @@ function hideConsole() {
 
 function startConsole() {
     if (!consoleClient) {
-        consoleClient = new jacdac.ConsoleClient()
-        consoleClient.minPriority = jacdac.consolePriority =  ConsolePriority.Debug
+        consoleClient = new jacdac.LoggerClient()
+        consoleClient.minPriority = jacdac.LoggerPriority.Debug
+        jacdac.consolePriority =  ConsolePriority.Debug
         consoleClient.start()
     }
     showConsole()
@@ -152,7 +113,7 @@ function mainMenu() {
     menu.show({
         title: "JACDAC tool",
         update: opts => {
-            opts.elements = allDNSes().map(d => menu.item("DNS: " + describe(d), () => operateDNS(d)))
+            // opts.elements = allDNSes().map(d => menu.item("DNS: " + describe(d), () => operateDNS(d)))
             opts.elements.push(menu.item("Device browser", deviceBrowser))
             opts.elements.push(menu.item("WiFi", wifi))
             opts.elements.push(menu.item("Console", startConsole))

@@ -50,10 +50,10 @@ const serviceDescs: ServiceDesc[] = [
         //jacdac.monoLightClient.setBrightness(0)
     }),
     new ServiceDesc(jacdac.SRV_SERVO, "servo", num =>
-        (num & 3) == 0 ? modules.servo.turnOff() :
-            modules.servo.setAngle(num & 1 ? 90 : 45)),
+        (num & 3) == 0 ? modules.servo1.turnOff() :
+            modules.servo1.setAngle(num & 1 ? 90 : 45)),
     new ServiceDesc(jacdac.SRV_MOTOR, "motor", num =>
-        modules.motor.run(((num % 11) - 5) * 20)),
+        modules.motor1.run(((num % 11) - 5) * 20)),
     new ServiceDesc(jacdac.SRV_LOGGER, "logger"),
     new ServiceDesc(jacdac.SRV_ROTARY_ENCODER, "crank",
         num => modules.rotaryEncoder1.setStreaming(num & 1 ? true : false)),
@@ -64,17 +64,25 @@ const serviceDescs: ServiceDesc[] = [
 ]
 
 class RawSensorClient extends jacdac.SensorClient {
-    constructor(name: string, deviceClass: number, requiredDevice: string) {
-        super(deviceClass, name, requiredDevice)
+    constructor(name: string, deviceClass: number) {
+        super(deviceClass, name, "b")
+    }
+    get reading() {
+        const vals = this._reading.values
+        if (vals) {
+            const buf = vals[0] as Buffer
+            return jacdac.intOfBuffer(buf)
+        }
+        return undefined
     }
 }
 
 function sensorView(d: jacdac.Device, s: ServiceDesc) {
-    const client = new RawSensorClient(s.name, s.classNum, d.deviceId)
+    const client = new RawSensorClient(d.deviceId, s.classNum)
     const reading = menu.item("Reading: ", () => { })
     client.setStreaming(true)
     client.onStateChanged(() => {
-        reading.name = "Reading: " + jacdac.intOfBuffer(client.reading)
+        reading.name = "Reading: " + client.reading
     })
 
     menu.show({
