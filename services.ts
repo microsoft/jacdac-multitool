@@ -8,12 +8,12 @@ class ServiceDesc {
 
 const serviceDescs: ServiceDesc[] = [
     new ServiceDesc(jacdac.SRV_ACCELEROMETER, "acc",
-        num => jacdac.accelerometerClient.setStreaming(num & 1 ? true : false)),
-    new ServiceDesc(jacdac.SRV_LIGHT, "light", (num) => {
-        const cl = jacdac.lightClient;
+        num => modules.accelerometer1.setStreaming(num & 1 ? true : false)),
+    new ServiceDesc(jacdac.SRV_LED_PIXEL, "light", (num) => {
+        const cl = modules.ledPixel1
         cl.setBrightness(10);
         //cl.setStrip(128, jacdac.LightType.WS2812B_SK9822)
-        cl.setStrip(80, jacdac.LightType.WS2812B_GRB)
+        cl.configure(80, jacdac.LedPixelLightType.WS2812B_GRB)
 
         const duration = 30 * 1000
         //cl.showAnimation(new jacdac.lightanimation.ColorWipe, duration)
@@ -23,25 +23,25 @@ const serviceDescs: ServiceDesc[] = [
                 cl.runEncoded("setall #000000")
                 break
             case 1:
-                cl.showAnimation(new jacdac.lightanimation.Comet, duration)
+                cl.showAnimation(modules.ledPixelAnimations.comet, duration)
                 break
             case 2:
-                cl.showAnimation(new jacdac.lightanimation.Fireflys, duration)
+                cl.showAnimation(modules.ledPixelAnimations.firefly, duration)
                 break
             case 3:
-                cl.showAnimation(new jacdac.lightanimation.RainbowCycle, duration)
+                cl.showAnimation(modules.ledPixelAnimations.rainbowCycle, duration)
                 break
             case 4:
-                cl.showAnimation(new jacdac.lightanimation.RunningLights, duration)
+                cl.showAnimation(modules.ledPixelAnimations.runningLights, duration)
                 break
             case 5:
-                cl.showAnimation(new jacdac.lightanimation.Sparkle, duration)
+                cl.showAnimation(modules.ledPixelAnimations.sparkle, duration)
                 break
             case 6:
-                cl.showAnimation(new jacdac.lightanimation.TheaterChase, duration)
+                cl.showAnimation(modules.ledPixelAnimations.theatherChase, duration)
                 break
             case 7:
-                cl.showAnimation(new jacdac.lightanimation.ColorWipe, duration)
+                cl.showAnimation(modules.ledPixelAnimations.colorWipe, duration)
                 break
         }
 
@@ -50,27 +50,22 @@ const serviceDescs: ServiceDesc[] = [
         //jacdac.monoLightClient.setBrightness(0)
     }),
     new ServiceDesc(jacdac.SRV_SERVO, "servo", num =>
-        (num & 3) == 0 ? jacdac.servoClient.turnOff() :
-            jacdac.servoClient.setAngle(num & 1 ? 90 : 45)),
+        (num & 3) == 0 ? modules.servo.turnOff() :
+            modules.servo.setAngle(num & 1 ? 90 : 45)),
     new ServiceDesc(jacdac.SRV_MOTOR, "motor", num =>
-        jacdac.motorClient.run(((num % 11) - 5) * 20)),
-    new ServiceDesc(jacdac.SRV_PWM_LIGHT, "glo", num => {
-        jacdac.monoLightClient.setBrightness(num & 1 ? 50 : 0)
-        jacdac.monoLightClient.setIterations(1)
-        jacdac.monoLightClient.showAnimation(jacdac.mono.slowGlow)
-    }),
+        modules.motor.run(((num % 11) - 5) * 20)),
     new ServiceDesc(jacdac.SRV_LOGGER, "logger"),
     new ServiceDesc(jacdac.SRV_ROTARY_ENCODER, "crank",
-        num => jacdac.rotaryEncoderClient.setStreaming(num & 1 ? true : false)),
+        num => modules.rotaryEncoder1.setStreaming(num & 1 ? true : false)),
     new ServiceDesc(jacdac.SRV_BUTTON, "btn",
-        num => jacdac.rotaryEncoderClient.setStreaming(num & 1 ? true : false)),
+        num => modules.rotaryEncoder1.setStreaming(num & 1 ? true : false)),
     new ServiceDesc(jacdac.SRV_BUZZER, "buz",
-        num => jacdac.buzzerClient.playMelody(music.jumpDown, 20)),
+        num => modules.buzzer1.playMelody(music.jumpDown, 20)),
 ]
 
 class RawSensorClient extends jacdac.SensorClient {
     constructor(name: string, deviceClass: number, requiredDevice: string) {
-        super(name, deviceClass, requiredDevice)
+        super(deviceClass, name, requiredDevice)
     }
 }
 
@@ -79,7 +74,7 @@ function sensorView(d: jacdac.Device, s: ServiceDesc) {
     const reading = menu.item("Reading: ", () => { })
     client.setStreaming(true)
     client.onStateChanged(() => {
-        reading.name = "Reading: " + jacdac.intOfBuffer(client.state)
+        reading.name = "Reading: " + jacdac.intOfBuffer(client.reading)
     })
 
     menu.show({
