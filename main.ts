@@ -114,6 +114,7 @@ function mainMenu() {
         title: "JACDAC tool",
         update: opts => {
             // opts.elements = allDNSes().map(d => menu.item("DNS: " + describe(d), () => operateDNS(d)))
+            opts.elements = []
             opts.elements.push(menu.item("Device browser", deviceBrowser))
             opts.elements.push(menu.item("WiFi", wifi))
             opts.elements.push(menu.item("Console", startConsole))
