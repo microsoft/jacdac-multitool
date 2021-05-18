@@ -10,12 +10,12 @@ function describe(dev: jacdac.Device) {
     let name = ""
     if (dev == jacdac.selfDevice())
         name = "<self>"
-        /*
-    else if (dns) {
-        const bound = dns.remoteRequestedDevices.find(d => d.boundTo == dev)
-        if (bound) name = "(" + bound.name + ")"
-    }
-    */
+    /*
+else if (dns) {
+    const bound = dns.remoteRequestedDevices.find(d => d.boundTo == dev)
+    if (bound) name = "(" + bound.name + ")"
+}
+*/
     return `${dev.shortId} ${name}`
 }
 
@@ -73,7 +73,7 @@ function wifi() {
     showConsole()
 
     //net.updateAccessPoint("SSID", "pass")
-    
+
     console.log("WiFi starting...")
     net.logPriority = ConsolePriority.Log
     const n = net.instance()
@@ -129,3 +129,12 @@ function main() {
 
 jacdac.start({ disableRoleManager: true })
 control.runInBackground(main)
+
+namespace game {
+    export function pushScene() {
+        game.pushEventContext()
+    }
+    export function popScene() {
+        control.popEventContext()
+    }
+}

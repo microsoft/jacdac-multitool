@@ -3,10 +3,9 @@
     "version": "0.1.0",
     "description": "",
     "dependencies": {
+        "game---light": "*",
         "hw": "*",
         "device": "*",
-        "controller": "*",
-        "edge-connector": "*",
         "net": "*",
         "jacdac": "github:microsoft/pxt-jacdac#v0.4.82",
         "jacdac-accelerometer": "github:microsoft/pxt-jacdac/accelerometer#v0.4.82",
