@@ -63,7 +63,6 @@ function startConsole() {
     if (!consoleClient) {
         consoleClient = new jacdac.LoggerClient()
         consoleClient.minPriority = jacdac.LoggerPriority.Debug
-        jacdac.consolePriority =  ConsolePriority.Debug
         consoleClient.start()
     }
     showConsole()
@@ -124,9 +123,9 @@ function mainMenu() {
 }
 
 function main() {
-    jacdac.start()
     menu.wait(1000, "Scanning...")
     mainMenu()
 }
 
+jacdac.start({ disableRoleManager: true })
 control.runInBackground(main)
