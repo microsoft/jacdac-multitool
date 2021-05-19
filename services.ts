@@ -154,7 +154,7 @@ function hexNum(n: number) {
 let testDevN = 0
 let lastDev: jacdac.Device
 function testDevice(d: jacdac.Device) {
-    if (d == jacdac.selfDevice())
+    if (d == jacdac.bus.selfDevice)
         return
     if (d != lastDev)
         testDevN = 1
@@ -170,11 +170,8 @@ function testDevice(d: jacdac.Device) {
     }
 }
 
-let pktHandler = (_: jacdac.JDPacket) => { }
-jacdac.onRawPacket((p) => pktHandler(p))
-
 function deviceView(d: jacdac.Device) {
-    if (d == jacdac.selfDevice())
+    if (d == jacdac.bus.selfDevice)
         return
     const services: ServiceDesc[] = []
     for (let i = 4; i < d.services.length; i += 4) {
@@ -188,26 +185,27 @@ function deviceView(d: jacdac.Device) {
     let num = 0
     let noopSent = 0
     let noopRecv = 0
-    
-    
+
+
     function noop() { }
 
     // TODO: using function syntax here causes crash at runtime; investigate
     const noopTest = () => {
         noopSent = noopRecv = 0
         const pkt = jacdac.JDPacket.from(jacdac.ControlCmd.Noop, Buffer.create(0))
-        pktHandler = r => {
+        const unsub = jacdac.bus.subscribe(jacdac.PACKET_PROCESS, (r: jacdac.JDPacket) => {
             if (r.serviceIndex == jacdac.JD_SERVICE_INDEX_CRC_ACK
                 && pkt.crc == r.serviceCommand
                 && r.deviceIdentifier == d.deviceId)
                 noopRecv++
-        }
+        })
         pkt.requiresAck = true
         for (let i = 0; i < 1000; ++i) {
             noopSent++
             pkt._sendCmd(d)
             pause(3) // the real rate seems about 10ms per packet sent
         }
+        unsub()
     }
 
     menu.show({

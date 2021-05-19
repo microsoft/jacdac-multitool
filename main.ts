@@ -1,21 +1,25 @@
 function identify(d: jacdac.Device) {
     if (!d) return
-    if (d == jacdac.selfDevice())
-        control.runInBackground(jacdac.onIdentifyRequest)
-    else
+    if (d == jacdac.bus.selfDevice) {
+        control.runInParallel(() => {
+            jacdac.bus.emit(jacdac.IDENTIFY)
+            jacdac.bus.emit(jacdac.STATUS_EVENT, jacdac.StatusEvent.Identify)
+        })
+    } else {
         d.sendCtrlCommand(jacdac.ControlCmd.Identify)
+    }
 }
 
 function describe(dev: jacdac.Device) {
     let name = ""
-    if (dev == jacdac.selfDevice())
+    if (dev == jacdac.bus.selfDevice)
         name = "<self>"
-        /*
-    else if (dns) {
-        const bound = dns.remoteRequestedDevices.find(d => d.boundTo == dev)
-        if (bound) name = "(" + bound.name + ")"
-    }
-    */
+    /*
+else if (dns) {
+    const bound = dns.remoteRequestedDevices.find(d => d.boundTo == dev)
+    if (bound) name = "(" + bound.name + ")"
+}
+*/
     return `${dev.shortId} ${name}`
 }
 
@@ -26,7 +30,7 @@ function selectDevice(fun: string, cond: (dev: jacdac.Device) => boolean) {
         title: "Function: " + fun,
         footer: "A = select, -> = identify",
         update: opts => {
-            devs = jacdac.devices().filter(cond)
+            devs = jacdac.bus.devices.filter(cond)
             opts.elements = devs.map(d => menu.item(describe(d), opts => {
                 res = d
                 menu.exit(opts)
@@ -73,7 +77,7 @@ function wifi() {
     showConsole()
 
     //net.updateAccessPoint("SSID", "pass")
-    
+
     console.log("WiFi starting...")
     net.logPriority = ConsolePriority.Log
     const n = net.instance()
@@ -96,7 +100,7 @@ function deviceBrowser() {
         title: "JACDAC browser",
         footer: "A=view, > test, < ID",
         update: opts => {
-            devs = jacdac.devices()
+            devs = jacdac.bus.devices.slice()
             devs.sort((a, b) => a.shortId.compare(b.shortId))
             opts.elements = devs.map(d => menu.item(describe(d), () => deviceView(d),
                 () => testDevice(d), () => identify(d)))
